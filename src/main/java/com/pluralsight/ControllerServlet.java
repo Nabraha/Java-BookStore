@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.RepaintManager;
 import javax.inject.Inject;
 /**
  * Servlet implementation class HelloWorld
@@ -64,6 +65,9 @@ public class ControllerServlet extends HttpServlet {
 		  break;
 				case "/edit":
 					showEditForm(request, response);
+		  break;
+				case "/update":
+					updateBook(request, response);
 		  break;
 		  
           default:
@@ -129,6 +133,19 @@ public class ControllerServlet extends HttpServlet {
 		request.setAttribute("book", existingBook);
 		dispatcher.forward(request, response);
 		
+	}
+	
+	private void updateBook(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException{
+		int id = Integer.parseInt(request.getParameter("id"));
+		String title = request.getParameter("booktitle");
+		String author = request.getParameter("bookauthor");
+		String price = request.getParameter("bookprice");
+		
+		Book newBook = new Book(id, title, author, Float.parseFloat(price));
+		bookDAO.updateBook(newBook);
+		
+		response.sendRedirect("List");
 	}
 
 
